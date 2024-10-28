@@ -3,13 +3,12 @@ info:
   title: Pokémon API
   description: An API to retrieve a list of Pokemon and fetch detailed information on each Pokemon using the PokeAPI.
   version: "1.0.0"
-host: pokemon-app:8000
-basePath: /api/v1/pokemon
+host: pokeapi.co
+basePath: /api/v2
 schemes:
-  - http
-
+  - https
 paths:
-  /pokeapi.co/api/v2/pokemon:
+  /pokemon:
     get:
       summary: Get a list of all available Pokemon
       description: Fetches a paginated list of Pokémon with basic details.
