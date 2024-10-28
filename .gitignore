@@ -22,3 +22,5 @@ yarn-error.log
 /.zed
 /.DS_Store
 /bootstrap/.DS_Store
+/shared/db_data
+/storage/framework/views
