@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Repositories\PokemonRepository;
 use App\Services\MakeRequestToPokeAPIService;
 use Illuminate\Console\Command;
 use Illuminate\Http\Client\ConnectionException;
@@ -21,7 +20,12 @@ class FetchPokemonResourceFromAPI extends Command
     {
         $pokemonApiService = new MakeRequestToPokeAPIService();
         $this->info('Fetching Pokemon data from PokeAPI --------');
-        $pokemonApiService->getPokemonList();
-        $this->info("Fetching data from PokeAPI completed successfully and saved Pokemon details in the database");
+        $return = $pokemonApiService->getPokemonList();
+        if ($return === true) {
+            $this->info("Fetching data from PokeAPI completed successfully and saved Pokemon details in the database");
+        }
+        else {
+            $this->info($return);
+        }
     }
 }
