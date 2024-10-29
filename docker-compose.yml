@@ -7,7 +7,7 @@ services:
             VIRTUAL_HOST: pokemon-app.local
         extra_hosts:
             - host.docker.internal:host-gateway
-        container_name: POKEDEX_APP_SERVER
+        container_name: APP_SERVER
         ports:
             - "8080:80"
         volumes:
@@ -29,6 +29,6 @@ services:
             MYSQL_PASSWORD: ${DB_PASSWORD}
             MYSQL_DATABASE: ${DB_DATABASE}
             SERVICE_NAME: mysql
-        container_name: POKEDEX_APP_DBSERVER
+        container_name: APP_DBSERVER
         volumes:
             - ./shared/db_data:/var/lib/mysql

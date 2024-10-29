@@ -7,6 +7,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/pokemon', [PokemonController::class, 'index'])->name('pokemon.index');
+Route::get('/pokemon/api', [PokemonController::class, 'index']);
 
-Route::get('/pokemon/{name}', [PokemonController::class, 'show'])->name('pokemon.show');
+//Route::get('/pokemon/{id}', [PokemonController::class, 'showDetails']);

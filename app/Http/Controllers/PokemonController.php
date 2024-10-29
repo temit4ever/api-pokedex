@@ -3,25 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\PokemonRepository;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+use App\Services\MakeRequestToPokeAPIService;
+use Illuminate\Http\JsonResponse;
 
 class PokemonController extends Controller
 {
-    public function __construct(protected PokemonRepository $pokemonRepository)
-    {
-    }
+    public function __construct(
+        protected PokemonRepository $pokemonRepository,
+        protected MakeRequestToPokeAPIService $service
+    ){}
 
     /**
      */
-    public function index(): LengthAwarePaginator
+    public function index(): JsonResponse
     {
-        return $this->pokemonRepository->getAllPokemon();
+        $result = $this->pokemonRepository->getAllPokemon();
+        return response()->json($result);
     }
-   public function show($pokemon)
+   public function show($pokemon): JsonResponse
    {
-       return $this->pokemonRepository->getPokemonByName($pokemon);
+      $result = $this->pokemonRepository->getPokemonByName($pokemon);
+      return response()->json($result);
+   }
+
+   public function showDetails($pokemon): JsonResponse
+   {
+       $result = $this->pokemonRepository->getPokemonById($pokemon);
+       return response()->json($result);
+   }
+   public function handle()
+   {
+       $this->service->getPokemonList();
    }
 }
