@@ -31,8 +31,4 @@ class PokemonController extends Controller
        $result = $this->pokemonRepository->getPokemonById($pokemon);
        return response()->json($result);
    }
-   public function handle()
-   {
-       $this->service->getPokemonList();
-   }
 }

@@ -27,7 +27,6 @@ const pokemon = ref({});
 
 const fetchPokemonDetails = async () => {
     try {
-        console.log(route.params)
         const response = await axios.get(`/api/v2/pokemon/${route.params.id}`);
         pokemon.value = response.data;
         console.log(response.data)

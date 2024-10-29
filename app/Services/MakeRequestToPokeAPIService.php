@@ -63,9 +63,7 @@ class MakeRequestToPokeAPIService
 
             $this->processAPIResources(Cache::get('all_pokemon'));
         }
-
-        //dd(Pokemon::getOnePokemonId()->isNotEmpty());
-
+        
         if (!empty(Cache::get('all_pokemon')) && Pokemon::getOnePokemonId()->isNotEmpty()) {
             return 'Not yet time to refresh data';
         }
