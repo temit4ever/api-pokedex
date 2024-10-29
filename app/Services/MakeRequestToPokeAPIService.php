@@ -19,16 +19,15 @@ class MakeRequestToPokeAPIService
     }
 
     /**
-     * @return void
+     * @return string|true
      * @throws ConnectionException
      */
-    public function getPokemonList(): void
+    public function getPokemonList(): string|true
     {
         $limit = config('pokemon.default.limit');
         $offset = config('pokemon.default.offset');
-
         if (empty(Cache::get('all_pokemon'))) {
-            //
+
             Cache::remember('all_pokemon', 86400, function () use ($limit, $offset) {
                 $pokemon_data = [];
                 $total_pokemon = config('pokemon.default.total_count');
@@ -61,9 +60,15 @@ class MakeRequestToPokeAPIService
 
                 return $pokemon_data;
             });
+
+            $this->processAPIResources(Cache::get('all_pokemon'));
+        }
+        
+        if (!empty(Cache::get('all_pokemon')) && Pokemon::getOnePokemonId()->isNotEmpty()) {
+            return 'Not yet time to refresh data';
         }
 
-       $this->processAPIResources(Cache::get('all_pokemon'));
+        return true;
     }
 
     public function setHeader(): array
@@ -80,7 +85,11 @@ class MakeRequestToPokeAPIService
      */
     public function processAPIResources(array $pokemon_data): void
     {
-        $counter = 0;
+        // Empty table record before pulling in fresh data from the API
+        if (Pokemon::getOnePokemonId()->isNotEmpty()) {
+            Pokemon::deleteAllPokemon();
+        }
+
         foreach ($pokemon_data as $pokemon) {
             $pokemon_details = Http::withHeaders($this->setHeader())
                 ->retry((int) $this->retry)
@@ -96,7 +105,7 @@ class MakeRequestToPokeAPIService
             $types = $this->extractTypes($pokemon_details['types']);
 
             Pokemon::create([
-                'name' => $pokemon_details["name"],
+                'name' => ucfirst($pokemon_details["name"]),
                 'ability' => $abilities,
                 'type' => $types,
                 'weight' => $pokemon_details["weight"],
@@ -108,13 +117,13 @@ class MakeRequestToPokeAPIService
 
     public function extractAbilities(array $abilities): string
     {
-        $abilities_name = array_map(fn($ability) => $ability['ability']['name'], $abilities);
+        $abilities_name = array_map(fn($ability) => ucfirst($ability['ability']['name']), $abilities);
         return implode(', ', $abilities_name);
     }
 
     public function extractTypes(array $types): string
     {
-        $type_name = array_map(fn($type) => $type['type']['name'], $types);
+        $type_name = array_map(fn($type) => ucfirst($type['type']['name']), $types);
         return implode(', ', $type_name);
     }
 }
