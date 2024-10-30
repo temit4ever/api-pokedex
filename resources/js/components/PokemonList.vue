@@ -24,4 +24,5 @@ onMounted(fetchPokemon);
     <div v-if="pokemonList.length" class="pokemon-list mt-4" id="list-table">
         <PokemonTable :pokemonList="pokemonList"/>
     </div>
+    <div v-else>No Pokemon to display. Looks like no record is available yet</div>
 </template>

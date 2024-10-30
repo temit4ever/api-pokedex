@@ -21,11 +21,6 @@ class FetchPokemonResourceFromAPI extends Command
         $pokemonApiService = new MakeRequestToPokeAPIService();
         $this->info('Fetching Pokemon data from PokeAPI --------');
         $return = $pokemonApiService->getPokemonList();
-        if ($return === true) {
-            $this->info("Fetching data from PokeAPI completed successfully and saved Pokemon details in the database");
-        }
-        else {
-            $this->info($return);
-        }
+        $this->info($return);
     }
 }
