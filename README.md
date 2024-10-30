@@ -10,6 +10,7 @@ Simple Laravel web application to connect to the PokeAPI
 - You also have two options here, you can either use docker or php artisan to set up the server
 
 ## For Docker - Make sure you have docker engine running
+- Create a folder `shared/db_data` in the root of the project
 - `docker-compose up -d --build`
 - `docker ps --all` To make sure all containers are running (APP_SERVER && APP_DBSERVER)
 - `docker exec -it APP_SERVER bash` to ssh into docker
