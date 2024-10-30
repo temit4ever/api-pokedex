@@ -17,7 +17,8 @@ Simple Laravel web application to connect to the PokeAPI
 - `npm run dev` to start up the frontend server
 
 ## For Artisan Command
+- `php artisan migrate` to run the migration for the tables
 - After bullet point 4 - you can run `php artisan serve`
-
-- You can configure the host path to use the host name `http://pokemon-app:8080` provided in the env.example file or change back to localhost in the .env.example file to use `127.0.0.1:8080`
+  
+- You can configure the host path to use the APP_URL `http://pokemon-app:8080` provided in the env.example file or change back to localhost in the .env.example file to use `127.0.0.1:8080`
 
