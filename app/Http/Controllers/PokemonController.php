@@ -17,7 +17,6 @@ class PokemonController extends Controller
      */
     public function index(): JsonResponse
     {
-        $res = $this->service->getAllPokemonApiCall(20, 0);
         $result = $this->pokemonRepository->getAllPokemon();
         return response()->json($result);
     }

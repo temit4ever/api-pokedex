@@ -111,12 +111,12 @@ class MakeRequestToPokeAPIService
     }
 
     /**
-     * @param mixed $limit
-     * @param mixed $offset
+     * @param int $limit
+     * @param int $offset
      * @return array|mixed
      * @throws ConnectionException
      */
-    function getAllPokemonApiCall(mixed $limit, mixed $offset): mixed
+    function getAllPokemonApiCall(int $limit, int $offset): mixed
     {
         return Http::withHeaders($this->setHeader())
             ->retry((int)$this->retry)
@@ -132,17 +132,16 @@ class MakeRequestToPokeAPIService
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return array|mixed
      * @throws ConnectionException
      */
-    public function getPokemonDetailsApiCall($name): mixed
+    public function getPokemonDetailsApiCall(string $name): mixed
     {
-        $pokemon_details = Http::withHeaders($this->setHeader())
+        return Http::withHeaders($this->setHeader())
             ->retry((int)$this->retry)
             ->baseUrl($this->base_url . $name)
             ->get('')
             ->json();
-        return $pokemon_details;
     }
 }
