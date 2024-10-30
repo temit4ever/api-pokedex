@@ -33,18 +33,7 @@ class MakeRequestToPokeAPIService
                 $total_pokemon = config('pokemon.default.total_count');
                 while ($offset < $total_pokemon) {
                     try {
-                        $response = Http::withHeaders($this->setHeader())
-                            ->retry((int) $this->retry)
-                            ->baseUrl($this->base_url)
-                            ->withQueryParameters(
-                                [
-                                    'limit' => $limit,
-                                    'offset' => $offset,
-                                ]
-                            )
-                            ->get('')
-                            ->json();
-
+                        $response = $this->getAllPokemonApiCall($limit, $offset);
                         if (empty($response["results"])) {
                             continue;
                         }
@@ -63,7 +52,7 @@ class MakeRequestToPokeAPIService
 
             $this->processAPIResources(Cache::get('all_pokemon'));
         }
-        
+
         if (!empty(Cache::get('all_pokemon')) && Pokemon::getOnePokemonId()->isNotEmpty()) {
             return 'Not yet time to refresh data';
         }
@@ -91,16 +80,10 @@ class MakeRequestToPokeAPIService
         }
 
         foreach ($pokemon_data as $pokemon) {
-            $pokemon_details = Http::withHeaders($this->setHeader())
-                ->retry((int) $this->retry)
-                ->baseUrl($this->base_url . $pokemon['name'])
-                ->get('')
-                ->json();
-
+            $pokemon_details = $this->getPokemonDetailsApiCall($pokemon['name']);
             if (empty($pokemon_details)) {
                 continue;
             }
-
             $abilities = $this->extractAbilities($pokemon_details['abilities']);
             $types = $this->extractTypes($pokemon_details['types']);
 
@@ -125,5 +108,41 @@ class MakeRequestToPokeAPIService
     {
         $type_name = array_map(fn($type) => ucfirst($type['type']['name']), $types);
         return implode(', ', $type_name);
+    }
+
+    /**
+     * @param mixed $limit
+     * @param mixed $offset
+     * @return array|mixed
+     * @throws ConnectionException
+     */
+    function getAllPokemonApiCall(mixed $limit, mixed $offset): mixed
+    {
+        return Http::withHeaders($this->setHeader())
+            ->retry((int)$this->retry)
+            ->baseUrl($this->base_url)
+            ->withQueryParameters(
+                [
+                    'limit' => $limit,
+                    'offset' => $offset,
+                ]
+            )
+            ->get('')
+            ->json();
+    }
+
+    /**
+     * @param $name
+     * @return array|mixed
+     * @throws ConnectionException
+     */
+    public function getPokemonDetailsApiCall($name): mixed
+    {
+        $pokemon_details = Http::withHeaders($this->setHeader())
+            ->retry((int)$this->retry)
+            ->baseUrl($this->base_url . $name)
+            ->get('')
+            ->json();
+        return $pokemon_details;
     }
 }
