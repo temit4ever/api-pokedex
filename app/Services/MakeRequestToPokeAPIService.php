@@ -19,15 +19,16 @@ class MakeRequestToPokeAPIService
     }
 
     /**
-     * @return string|true
+     * @return string
      * @throws ConnectionException
      */
-    public function getPokemonList(): string|true
+    public function getPokemonList(): string
     {
         $limit = config('pokemon.default.limit');
         $offset = config('pokemon.default.offset');
+        $is_cache_empty = false;
         if (empty(Cache::get('all_pokemon'))) {
-
+            $is_cache_empty = true;
             Cache::remember('all_pokemon', 86400, function () use ($limit, $offset) {
                 $pokemon_data = [];
                 $total_pokemon = config('pokemon.default.total_count');
@@ -53,11 +54,12 @@ class MakeRequestToPokeAPIService
             $this->processAPIResources(Cache::get('all_pokemon'));
         }
 
-        if (!empty(Cache::get('all_pokemon')) && Pokemon::getOnePokemonId()->isNotEmpty()) {
-            return 'Not yet time to refresh data';
+        if ($is_cache_empty) {
+            return 'Fetching data from PokeAPI completed successfully and saved Pokemon details in the database';
         }
 
-        return true;
+        return 'Not yet time to refresh data';
+
     }
 
     public function setHeader(): array
