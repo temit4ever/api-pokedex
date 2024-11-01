@@ -9,7 +9,6 @@
             <div><span class="text-indigo-400 text-4xl">Type</span> - <span class="text-3xl">{{ pokemon.type }}</span></div>
             <div><span class="text-indigo-400 text-4xl">Height</span> - <span class="text-3xl">{{ pokemon.height }}</span></div>
             <div><span class="text-indigo-400 text-4xl">Weight</span> - <span class="text-3xl">{{ pokemon.weight }}</span></div>
-
             <div>
                 <img class="flex" :src="pokemon.image" alt="Pokemon image" v-if="pokemon.image"/>
             </div>
@@ -29,7 +28,6 @@ const fetchPokemonDetails = async () => {
     try {
         const response = await axios.get(`/api/v2/pokemon/${route.params.id}`);
         pokemon.value = response.data;
-        console.log(response.data)
     } catch (error) {
         console.error('Error fetching Pokémon details:', error);
     }
