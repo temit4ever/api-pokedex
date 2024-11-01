@@ -25,7 +25,7 @@ class Pokemon extends Model
 
     public function scopeGetPokemonByName(Builder $query): LengthAwarePaginator
     {
-        return $query->where('name', 'LIKE', request('name') . '%')->paginate(15);
+        return $query->where('name', 'LIKE', request('name') . '%')->paginate(10);
     }
 
     public function scopeDeleteAllPokemon(Builder $query): Builder
