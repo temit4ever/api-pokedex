@@ -1,31 +1,13 @@
 <script setup>
 import {onMounted, ref} from 'vue';
 import PokemonTable from "./PokemonTable.vue";
+import usePokemon from '../pokemone.js';
+import Pagination from "./Pagination.vue";
 const searchQuery = ref('');
 const result = ref({});
+const {pokemonByName, pokemonByNamePagination, fetchPokemonByName } = usePokemon();
 
-const fetchPokemonByName = async () => {
-    if (searchQuery.value.trim() !== '') {
-        const name = searchQuery.value.toLowerCase()
-        const tableRow = document.getElementsByTagName('tr').length
-        let table = document.getElementById('list-table');
-        if (tableRow > 0) {
-            table.style.display = 'none'
-        }
-        try {
-            const response = await axios.get('/api/v1/pokemon/' + name);
-            if (response.data.data.length === 0 ) {
-                throw new Error('No Pokemon found with that name');
-            }
-
-            result.value = response.data.data
-        } catch (error) {
-            console.error('Error fetching Pokemon:', error);
-        }
-    }
-}
 onMounted(fetchPokemonByName);
-
 </script>
 
 <template>
@@ -44,7 +26,7 @@ onMounted(fetchPokemonByName);
                 focus:outline-none
                 focus:bg-white
                 focus:border-purple-500"
-                       id="inline-password"
+                       id="search-id"
                        type="text"
                        v-model="searchQuery"
                        placeholder="Search for Pokemon by name">
@@ -57,13 +39,14 @@ onMounted(fetchPokemonByName);
                 <button
                     class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                     type="button"
-                    @click="fetchPokemonByName"
+                    @click="fetchPokemonByName(1, searchQuery)"
                 >
                  Search
                 </button>
             </div>
-            <div v-if="result.length" class="pokemon-list mt-4" id="search-table">
-                <PokemonTable :pokemonList="result"/>
+            <div v-if="pokemonByName.length" class="pokemon-list mt-4" id="search-table">
+                <PokemonTable :pokemonList="pokemonByName"/>
+                <Pagination :pagination="pokemonByNamePagination" :fetchPokemon="fetchPokemonByName" />
             </div>
         </div>
 </template>

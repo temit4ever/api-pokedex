@@ -18,7 +18,7 @@ const viewDetails = (id) => {
         </tr>
         </thead>
         <tbody>
-        <tr v-for="pokemon in pokemonList" :key="pokemon.id">
+        <tr v-if="pokemonList.length > 0"  v-for="pokemon in pokemonList" :key="pokemon.id">
             <td>{{ pokemon.name }}</td>
             <td>{{ pokemon.type }}</td>
             <td>
@@ -27,6 +27,11 @@ const viewDetails = (id) => {
                 </button>
             </td>
         </tr>
+        <tr v-else>
+            <td colspan="6" class="text-center"><span class="text-2xl text-indigo-500">No results found ...</span></td>
+        </tr>
+        </tbody>
+        <tbody>
         </tbody>
     </table>
 </template>

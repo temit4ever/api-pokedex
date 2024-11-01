@@ -1,28 +1,18 @@
 <script setup>
-import {onMounted, ref} from "vue";
+import { onMounted } from "vue";
 import PokemonTable from "./PokemonTable.vue";
 import PokemonSearch from "./PokemonSearch.vue";
+import Pagination from "./Pagination.vue";
+import usePokemon from '../pokemone.js'
 
-const pokemonList = ref([]);
-const props = defineProps({
-    pokemonList: Object
-})
-
-const fetchPokemon = async () => {
-    try {
-        const response = await axios.get('/api/v1/pokemon');
-        pokemonList.value = response.data.data;
-    } catch (error) {
-        console.error('Error fetching Pokemon:', error);
-    }
-};
+const { pokemonList, pokemonPagination, fetchPokemon } = usePokemon()
 
 onMounted(fetchPokemon);
 </script>
 <template>
     <PokemonSearch v-if="pokemonList.length" />
-    <div v-if="pokemonList.length" class="pokemon-list mt-4" id="list-table">
+    <div class="pokemon-list mt-4" id="list-table">
         <PokemonTable :pokemonList="pokemonList"/>
+        <Pagination :pagination="pokemonPagination" :fetchPokemon="fetchPokemon" />
     </div>
-    <div v-else>No Pokemon to display. Looks like no record is available yet</div>
 </template>

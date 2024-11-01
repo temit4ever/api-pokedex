@@ -10,7 +10,7 @@ class PokemonIndexAction
 {
     public function handle(): LengthAwarePaginator
     {
-        return Pokemon::orderBy('name')->paginate(15);
+        return Pokemon::orderBy('name')->paginate(50);
 
     }
 }
