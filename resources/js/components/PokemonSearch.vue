@@ -1,11 +1,10 @@
 <script setup>
 import {onMounted, ref} from 'vue';
 import PokemonTable from "./PokemonTable.vue";
-import usePokemon from '../pokemone.js';
+import usePokemon from '../composable/pokemone.js';
 import Pagination from "./Pagination.vue";
 const searchQuery = ref('');
-const result = ref({});
-const {pokemonByName, pokemonByNamePagination, fetchPokemonByName } = usePokemon();
+const { pokemonByName, pokemonByNamePagination, fetchPokemonByName } = usePokemon();
 
 onMounted(fetchPokemonByName);
 </script>
@@ -39,13 +38,13 @@ onMounted(fetchPokemonByName);
                 <button
                     class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                     type="button"
-                    @click="fetchPokemonByName(1, searchQuery)"
+                    @click="fetchPokemonByName(1, searchQuery, $event)"
                 >
                  Search
                 </button>
             </div>
             <div v-if="pokemonByName.length" class="pokemon-list mt-4" id="search-table">
-                <PokemonTable :pokemonList="pokemonByName"/>
+                <PokemonTable :pokemonList="pokemonByName" />
                 <Pagination :pagination="pokemonByNamePagination" :fetchPokemon="fetchPokemonByName" />
             </div>
         </div>

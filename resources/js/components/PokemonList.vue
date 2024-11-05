@@ -3,7 +3,7 @@ import { onMounted } from "vue";
 import PokemonTable from "./PokemonTable.vue";
 import PokemonSearch from "./PokemonSearch.vue";
 import Pagination from "./Pagination.vue";
-import usePokemon from '../pokemone.js'
+import usePokemon from '../composable/pokemone.js'
 
 const { pokemonList, pokemonPagination, fetchPokemon } = usePokemon()
 
